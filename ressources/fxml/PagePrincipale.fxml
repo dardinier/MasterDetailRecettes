@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.PagePrincipaleControleur">
+    <fx:define>
+        <Integer fx:id="moinsUn" fx:value="-1" />
+    </fx:define>
+    <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button text="Sauvegarder" onAction="#clicSauvegarder" />
+            <Button text="Charger" onAction="#clicCharger" />
+        </items>
+      </ToolBar>
+   </top>
+    <left>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="nomLivreTextField" />
+            <ListView fx:id="recettesListView" />
+            <HBox>
+               <children>
+                  <TextField fx:id="nouveauNomRecetteTextField" />
+                  <Button onAction="#clicAjouterRecette" text="Ajouter une recette" />
+               </children>
+            </HBox>
+            <Button disable="${recettesListView.selectionModel.selectedIndex == moinsUn}" onAction="#clicSupprimerRecette" prefWidth="316.0" text="Supprimer cette recette" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="nomRecetteTextField" disable="${recettesListView.selectionModel.selectedIndex == moinsUn}" />
+            <TextArea fx:id="procedureTextArea" disable="${recettesListView.selectionModel.selectedIndex == moinsUn}" prefHeight="453.0" prefWidth="549.0" />
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
