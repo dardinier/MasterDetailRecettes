@@ -1,10 +1,8 @@
 package vue;
 
+import fabrique.LivreRecetteFabrique;
 import vue.cell.RecetteCell;
-import fabrique.LivreRecetteVMFabrique;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -27,7 +25,7 @@ public class PagePrincipaleControleur {
     
     @FXML
     private void initialize() {
-        livreRecetteVM = LivreRecetteVMFabrique.creerLivreRecetteVM("Mon premier livre");
+        livreRecetteVM = new LivreRecetteVM(LivreRecetteFabrique.creerLivreRecette("Mon premier livre"));
         nomLivreTextField.textProperty().bindBidirectional(livreRecetteVM.nomLivreProperty());
         recettesListView.itemsProperty().bind(livreRecetteVM.recettesProperty());
         recettesListView.getSelectionModel().selectedItemProperty().addListener((o, ancienRecette, nouveauRecette) -> {
@@ -75,7 +73,7 @@ public class PagePrincipaleControleur {
         try {
             livreRecetteVM.sauvegarder("sauvegarde.bin");
         } catch (IOException ex) {
-            Logger.getLogger(PagePrincipaleControleur.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("La sauvegarde a échoué. Veuillez rééssayer.");
         }
     }
     
@@ -84,7 +82,7 @@ public class PagePrincipaleControleur {
         try {
             livreRecetteVM.charger("sauvegarde.bin");
         } catch (IOException ex) {
-            Logger.getLogger(PagePrincipaleControleur.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Le chargement a échoué. Fichier de sauvegarde corrompu.");
         }
         nomRecetteTextField.setText("");
         procedureTextArea.setText("");

@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Chargeur {
     
-    public static Serializable charger(String nomFichier) throws ClassNotFoundException, IOException {
+    public Serializable charger(String nomFichier) throws ClassNotFoundException, IOException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nomFichier))) {
             return (Serializable) ois.readObject();
         }

@@ -1,8 +1,8 @@
 package vue.modele;
 
-import fabrique.LivreRecetteFabrique;
 import fabrique.RecetteFabrique;
 import io.Chargeur;
+import io.Sauvegardeur;
 import java.beans.IndexedPropertyChangeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,22 +31,25 @@ public class LivreRecetteVM implements PropertyChangeListener {
     
     private LivreRecette modele;
 
-    public LivreRecetteVM(String nomLivre) {
-        this.nomLivre.set(nomLivre);
-        modele = LivreRecetteFabrique.creerLivreRecette(nomLivre);
+    public LivreRecetteVM(LivreRecette livreRecette) {
+        initVM(livreRecette);
+    }
+    
+    private void initVM(LivreRecette livreRecette) {
+        modele = livreRecette;
         modele.addPropertyChangeListener(this);
-        nomLivreProperty().addListener((o, ancienNomLivre, nouveauNomLivre) -> {
+        nomLivre.set(modele.getNomLivre());
+        nomLivre.addListener((o, ancienNomLivre, nouveauNomLivre) -> {
             modele.setNomLivre(nouveauNomLivre);
         });
-    }
-
-    public LivreRecette getModele() {
-        return modele;
+        recettesObs.clear();
+        modele.getRecettes().forEach((recette) -> {
+            recettesObs.add(new RecetteVM(recette));
+        });
     }
     
     public void ajouterRecette(String nomRecette) {
         modele.ajouterRecette(RecetteFabrique.creerRecette(nomRecette, ""));
-        System.out.println("salut alexis");
     }
     
     public void supprimerRecette(int index) {
@@ -70,16 +73,12 @@ public class LivreRecetteVM implements PropertyChangeListener {
     }
 
     public void sauvegarder(String nomFichier) throws IOException {
-        modele.sauvergarder(modele, nomFichier);
+        Sauvegardeur sauvegardeur = new Sauvegardeur();
+        sauvegardeur.sauver(modele, nomFichier);
     }
 
     public void charger(String nomFichier) throws ClassNotFoundException, IOException {
-        modele = (LivreRecette) Chargeur.charger(nomFichier);
-        modele.addPropertyChangeListener(this);
-        nomLivre.set(modele.getNomLivre());
-        recettesObs.clear();
-        modele.getRecettes().forEach((recette) -> {
-            recettesObs.add(new RecetteVM(recette));
-        });
+        Chargeur chargeur = new Chargeur();
+        initVM((LivreRecette) chargeur.charger(nomFichier));
     }
 }
