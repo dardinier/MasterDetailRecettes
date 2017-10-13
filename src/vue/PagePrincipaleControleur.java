@@ -86,5 +86,7 @@ public class PagePrincipaleControleur {
         } catch (IOException ex) {
             Logger.getLogger(PagePrincipaleControleur.class.getName()).log(Level.SEVERE, null, ex);
         }
+        nomRecetteTextField.setText("");
+        procedureTextArea.setText("");
     }
 }
